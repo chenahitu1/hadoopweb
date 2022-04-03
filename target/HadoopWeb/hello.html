@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="GBK" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+<!--    <style>-->
+<!--        #beta ul li {-->
+<!--            display: inline-block;-->
+<!--            width: 40px;-->
+<!--            background-color: #3cc3bd;-->
+<!--            margin-left: 10px;-->
+<!--            text-align: center;-->
+<!--            cursor: pointer;-->
+<!--            color: #fff;-->
+<!--        }-->
+<!--        #beta ul li.variation {-->
+<!--            background-color: #fd5262;-->
+<!--        }-->
+<!--    </style>-->
+<!--    &lt;!&ndash; 通过cdn引入vue.js &ndash;&gt;-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
+</head>
+<body>
+<div id="beta">
+    <ul @click="entrust">
+        <li
+                v-for="(item,index) in dataList"
+                :key="index"
+                :data-index="index"
+                :data-item="item.name"
+                :class="{variation: pitchOn == index}"
+        >
+            {{ item.name }}
+        </li>
+    </ul>
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#beta',
+        data: {
+            message: '',
+            pitchOn: 0,
+            dataList: [
+                {
+                    name: '全部'
+                },
+                {
+                    name: '图片'
+                },
+                {
+                    name: '音乐'
+                },
+                {
+                    name: '文档'
+                },
+                {
+                    name: '其它'
+                }
+            ]
+        },
+        methods: {
+            entrust(e) {
+                var dom = e.target
+                var index = dom.getAttribute('data-index')
+                // 当点击到按钮外时,不执行
+                if (index !== null) {
+                    var item = dom.getAttribute('data-item')
+                    this.pitchOn = index
+                    console.log('我的下标为:', index, '对应的值为:', item)
+                }
+            }
+        }
+    })
+</script>
+</html>
+

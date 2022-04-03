@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="GBK">
+    <title></title>
+    <style type="text/css">
+        .div0{
+            position: absolute;
+            left: 10px;
+            top: 10px;
+        }
+        .DocumentButton,.musicButton,.allButton,.pictureButton,.otherButton{
+            background-color: #008c8c; /* Green */
+            border: none;
+            color: white;
+
+            /* width:100px;
+            height:50px; */
+            border-radius: 10px;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+        .div1{
+            /*width:100%;*/
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+        #uploadButton{
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+
+            /* width:100px;
+            height:50px; */
+            border-radius: 10px;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+
+
+        }
+        .div2{
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+        .batchDeleteButton,.batchDownloadButton,.mkDirFileButton,.backButton{
+            background-color: #008c8c; /* Green */
+            border: none;
+            color: white;
+
+            /* width:100px;
+            height:50px; */
+            border-radius: 10px;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+        .uploadtable,.renametable,.makeFiletable{
+            width:100%;
+            height: 100%;
+            border-collapse: collapse;}table caption{
+
+                                           font-size: 2em;
+
+                                           font-weight: bold;
+
+                                           margin: 2px 0;}th,td{
+
+                                                              border: 1px solid rgb(253, 250, 250);
+
+                                                              text-align: center;
+
+                                                              padding: 2px 0;}table thead tr{
+
+                                                                                  background-color: #008c8c;
+
+                                                                                  color: #fff;}table tbody tr:nth-child(odd){
+                                                                                                   /*:hover是一个伪类选中鼠标悬停的table tbody下tr标签即我通过这个伪类，实现了我鼠标悬停在表格主体的某个地方时，整行变色*/
+                                                                                               }table tbody tr:hover{
+                                                                                                    /*first-child()是伪类 选中table tbody tr下，第一个子元素并且必须是td元素 利用这个伪类，我实现了将表格主体的第一列全部单元的背景颜色改了*/
+                                                                                                    background-color: rgb(248, 244, 244);}table tbody tr td:first-child{
+
+                                                                                                                                              color: #f40;}table tfoot tr td{
+
+                                                                                                                                                               text-align: right;
+
+                                                                                                                                                               padding-right: 20px;}
+        #frame{
+            height: 300px;
+            width: 400px;
+            display: none;
+            position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+            margin: auto;
+            background-color: aliceblue;
+            border-right: 13px;
+            z-Index: 2;
+        }
+        #renameFrame{
+            height: 300px;
+            width: 400px;
+            display: none;
+            position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+            margin: auto;
+            background-color: aliceblue;
+            border-right: 13px;
+            z-Index: 2;
+        }
+        .makeFileFrame{
+            height: 300px;
+            width: 400px;
+            display: none;
+            position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+            margin: auto;
+            background-color: aliceblue;
+            border-right: 13px;
+            z-Index: 2;
+        }
+        #closeFrame,#closeRenameFrame,#closeMakeFileFrame{
+            color: white;
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 0px 0px;
+            background-color: #008c8c;
+            border: #eeeeee;
+
+        }
+        #closeFrame:hover, #closeFrame:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #table{
+
+            width: 100%;
+            /*border-collapse是table标签的一个属性，有两个取值：seperate 边框之间分离 collapse 两两相临边框合并*/
+            border-collapse: collapse;}table caption{
+                                           font-size: 2em;
+                                           font-weight: bold;
+                                           margin: 1em 0;}th,td{
+                                                              border: 1px solid #999;
+                                                              text-align: center;
+                                                              padding: 20px 0;}table thead tr{
+                                                                                   background-color: #008c8c;
+                                                                                   color: #fff;}table tbody tr:nth-child(odd){
+                                                                                                    /*:hover是一个伪类选中鼠标悬停的table tbody下tr标签即我通过这个伪类，实现了我鼠标悬停在表格主体的某个地方时，整行变色*/
+                                                                                                    background-color: #eee;}table tbody tr:hover{
+                                                                                                                                /*first-child()是伪类 选中table tbody tr下，第一个子元素并且必须是td元素 利用这个伪类，我实现了将表格主体的第一列全部单元的背景颜色改了*/
+                                                                                                                                background-color: #ccc;}table tbody tr td::-webkit-date-and-time-value{
+
+                                                                                                                                                            color: #f40;}table tfoot tr td{
+
+                                                                                                                                                                             text-align: right;
+
+                                                                                                                                                                             padding-right: 20px;}
+    </style>
+    <script type="text/javascript" src="js/jquery.js">
+    </script>
+    <script type="text/javascript">
+        var firstPath="/"
+        var url1="controller/fileIndex"
+        var url2="controller/Other"
+        var url3="controller/Picture"
+        var url4="controller/Text"
+        var url5="controller/Video"
+
+
+
+
+
+
+
+
+
+//全选
+//         var chAll = document.getElementById('chAll');
+//         var chAll = document.getElementsByName('all');
+//         var chs = document.getElementsByName('input');
+//
+//         chAll.onclick = function() {
+//             for(var i = 0; i<chs.length; i++){
+//                 chs[i].checked = this.checked;
+//             }
+//         }
+//         // 每个小按钮绑定事件
+//         for(var i = 0; i<chs.length; i++){
+//             chs[i].onclick = function() {
+//                 var flag = true;
+//                 for(var j = 0; j<chs.length; j++){
+//                     if(!chs[j].checked){
+//                         flag = false;
+//                     }
+//                 }
+//                 chAll.checked = flag;
+//             }
+//         }
+
+        $(function() {
+            //上传按钮做一个点击事件
+            $(".mkDirFileButton").click(function(){
+                $(".makeFileFrame").show();
+                var newFilePath="/";
+                if(firstPath=="/"){
+                    newFilePath=firstPath;
+                }else{
+                    newFilePath=firstPath+"/"
+                }
+                //把原来的名字放到输入框里
+                $("#newInput").val(newFilePath);
+            })
+            $("#closeMakeFileFrame").click(function(){
+                $(".makeFileFrame").hide();
+            });
+            $("#uploadButton").click(function(){
+                $("#frame").show();
+                var newFilePath1="/";
+                if(firstPath=="/"){
+                    newFilePath1=firstPath;
+                }else{
+                    newFilePath1=firstPath+"/"
+                }
+                $("#newInput1").val(newFilePath1);
+            })
+
+            $("#closeFrame").click(function(){
+                $("#frame").hide();
+            });
+            $(".backButton").click(function (){
+                var newFilePath2="/";
+                if(firstPath=="/"){
+                    newFilePath2=firstPath;
+                }else{
+                    newFilePath2=firstPath.substring(0,firstPath.lastIndexOf("/"));
+                    if(newFilePath2==""){
+                        newFilePath2=newFilePath2+"/";
+                    }
+                }
+                init(newFilePath2,url1);
+            })
+            $(".pictureButton").click(function(){
+                var enterPath = "/";
+                init(enterPath,url3);
+            })
+            $(".DocumentButton").click(function(){
+                var enterPath = "/";
+                init(enterPath,url4);
+            })
+            $(".musicButton").click(function(){
+                var enterPath = "/";
+                init(enterPath,url5)
+            })
+            $(".allButton").click(function(){
+                var enterPath = "/";
+                init(enterPath,url1)
+            })
+            $(".otherButton").click(function(){
+                var enterPath = "/";
+                init(enterPath,url2)
+            })
+            var path="/";
+            init(path,url1);
+        })
+        function init(indexPath,urls){
+            //每次点击获取数据前,把html的数据先清空
+            $("#tbody").html("");
+            var firstUrl=urls
+            firstPath=indexPath;
+
+
+
+
+            //全选按钮的点击事件
+            let checkAll = document.getElementById('checkAll');
+            let fileItems = document.getElementsByName('items');
+            checkAll.addEventListener('click', selectAllItems);
+            checkAll.addEventListener('click', undoAllItems);
+            //选择所有items
+            function selectAllItems() {
+                if( checkAll.checked) {
+                    for(let i=0; i<fileItems.length; i++) {
+                        if(!fileItems[i].checked && !fileItems[i].disabled) {
+                            fileItems[i].checked = true;
+                        }
+                    }
+                }
+            }
+
+            //取消全选
+            function undoAllItems() {
+                if( !checkAll.checked) {
+                    for(let i=0; i<fileItems.length; i++) {
+                        if(fileItems[i].checked) {
+                            fileItems[i].checked = false;
+                        }
+                    }
+                }
+            }
+
+            //批量删除
+            document.getElementById("deteleButton1").onclick = function () {
+                let arr = [];
+                let items = document.getElementsByName("items");
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].checked) {
+                        arr.push(items[i].id);
+                    }
+                }if (arr.length>=1){
+                    $.ajax({
+                        url: "http://localhost:8080/HadoopWeb_war/controller/moreDelete",
+                        method: "post",
+                        data: {
+                            //把要删除的路径传过去
+                            path: arr
+                        },
+                        success: function() {
+                            init(indexPath,urls);
+                        }
+                    })
+                }else {
+                    alert("未选择任何项")
+                }
+            }
+            document.getElementById("downButton1").onclick = function () {
+                let arr = [];
+                let items = document.getElementsByName("items");
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].checked) {
+                        arr.push(items[i].id);
+                    }
+                }if (arr.length>=1){
+                    $.ajax({
+                        url: "http://localhost:8080/HadoopWeb_war/controller/moreDown",
+                        method: "post",
+                        data: {
+                            path: arr
+                        },
+                        success: function() {
+                            init(indexPath,urls);
+                        }
+                    })
+                }else {
+                    alert("未选择任何项")
+                }
+            }
+
+
+
+
+
+
+            //前端掉后端的接口必须用到的技术,AJAX
+            $.ajax({
+                //接口地址
+                url: urls,
+                //调用类型
+                method: "post",
+                //传参
+                data: {
+                    path:indexPath
+                },
+                //返回的数据类型
+                dataType: "json",
+                //调用成功之后应该干嘛
+                success: function(data) {
+                    //遍历传回来的json数据,但是jquery会把json转成list
+                    //所以这里的data是一个list
+                    for (var i in data) {
+                        //创建一个tr标签
+                        var tr = $("<tr>");
+                        //名称
+                        var tdName = $("<td>");
+                        tdName.html(data[i]["name"]);
+                        //路径
+                        var tdPath = $("<td>");
+                        tdPath.html(data[i]["path"]);
+                        //是否文件夹
+                        var tdIsDir = $("<td>");
+                        // tdIsDir.html(data[i]["isDir"]);
+                        if(data[i]["isDir"]==true){
+                            var enterButton = $("<button>进入文件夹</button>");
+                            tdIsDir.append(enterButton)
+                            enterButton.attr("id",data[i]["path"]);
+                            enterButton.click(function() {
+                                var enterPath = $(this).attr("id");
+                                init(enterPath,url1)
+                            })
+                        }
+                        tdIsDir.append(enterButton);
+                        var tdSize = $("<td>");
+                        tdSize.html(data[i]["size"]);
+                        //日期
+                        var tdDate = $("<td>");
+                        tdDate.html(data[i]["timeStamp"]);
+                        //删除
+                        var tdAction = $("<td>");
+                        var deleteButton = $("<button>删除</button>");
+                        tdAction.append(deleteButton)
+                        //把要删除的路径传到按钮事件里
+                        deleteButton.attr("id",data[i]["path"]);
+                        deleteButton.click(function() {
+                            var deltePath= $(this).attr("id");
+                            $.ajax({
+                                url: "http://localhost:8080/HadoopWeb_war/controller/fileDelete",
+                                method: "post",
+                                data: {
+                                    //把要删除的路径传过去
+                                    path: deltePath
+                                },
+                                success: function(data) {
+                                    console.log("testtesttest");
+                                    init(firstPath,firstUrl);
+                                }
+                            })
+                        })
+                        var renameButton=$("<button>重名</button>")
+                        renameButton.attr("id",data[i]["path"]);
+                        renameButton.click(function(){
+                            var renamePath= $(this).attr("id");
+                            $("#renameFrame").show();
+                            //把原来的名字放到输入框里
+                            $("#orgName").val(renamePath);
+                            $("#closeRenameFrame").click(function(){
+                                $("#renameFrame").hide();
+                            });
+                        });
+                        tdAction.append(renameButton);
+                        var downloadButton = $("<button>下载<tton>");
+                        tdAction.append(downloadButton)
+                        //把要下载 的路径传到按钮事件里
+                        downloadButton.attr("id",data[i]["path"]);
+                        downloadButton.click(function() {
+                            var downPath= $(this).attr("id");
+                            $.ajax({
+                                url: "http://localhost:8080/HadoopWeb_war/controller/Download",
+                                method: "post",
+                                data: {
+                                    //把要下载的路径传过去
+                                    path: downPath
+                                },
+                            })
+                        })
+                        tdAction.append(downloadButton);
+                        var xuanzhe = $("<td>");
+                        // var tdCheck = $("<td class=\"checkbox\"><input type=\"checkbox\" name=\"\" ></td>");
+                        var xuanzheInput = $("<input type=\"checkbox\" name=\"items\" value=\"\" >");
+                        xuanzheInput.attr("id",data[i]["path"]);
+                        xuanzhe.html(xuanzheInput)
+                        tr.append(tdName);
+                        tr.append(tdPath);
+                        tr.append(tdSize);
+                        tr.append(tdDate);
+                        tr.append(tdIsDir);
+                        tr.append(tdAction);
+                        // tr.append(tdCheck)
+                        tr.append(xuanzhe);
+                        $("#tbody").append(tr);
+                    }
+                }
+            })
+        }
+    </script>
+
+</head>
+<body>
+<div class="div0">
+    <button class="allButton" >全部</button>
+    <button class="DocumentButton">文档</button>
+    <button class="pictureButton">图片</button>
+    <button class="musicButton">音乐</button>
+    <button class="otherButton">其它</button>
+</div>
+<div class="div1"><button id="uploadButton">上传文件</button></div>
+<div class="div2">
+    <button class="backButton">返回上级</button>
+    <button class="mkDirFileButton">创文件夹</button>
+    <button class="batchDeleteButton" id="deteleButton1">批量删除</button>
+    <button class="batchDownloadButton" id="downButton1">批量下载</button>
+</div>
+<table borderR="" cellspacing="" cellpadding="" id="table">
+    <caption>hadoop文件管理</caption>
+    <thead>
+    <tr>
+        <th>名称</th>
+        <th>路径</th>
+        <th>大小</th>
+        <th>日期</th>
+        <th>是否文件夹</th>
+        <th>操作</th>
+<!--        <th class="checkbox"><input type="checkbox" name="" id="chAll">-->
+        <th><input type="checkbox" id="checkAll" onclick="checkAll()"/>全选</th>
+    </tr>
+
+    <tbody id="tbody">
+
+    </tbody>
+    </thead>
+</table>
+<div id="frame">
+    <button id="closeFrame">&times;</button>
+<!--    <h2 class="tableTitle">上传文件框</h2>-->
+    <form method="post" action="controller/fileUpload" enctype="multipart/form-data">
+
+
+        <table border="" class="uploadtable" cellspacing="" cellpadding="">
+            <caption>上传文件框</caption>
+
+            <thead>
+            <tr>
+                <td>选择文件:</td>
+                <td><input  type="file" name="uploadFile" /></td>
+            </tr>
+            <tr>
+                <td>上传路径:</td>
+                <td><input  type="text" id="newInput1" name="path"></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"><input style="font-size: 20px" type="submit" value="上传"  /></td>
+            </tr>
+            </thead>
+        </table>
+
+    </form>
+</div>
+<div class="makeFileFrame">
+    <button id="closeMakeFileFrame">&times;</button>
+    <form action="controller/Mkdir" method="post">
+        <table border="" class="makeFiletable" cellspacing="" cellpadding="">
+            <caption>创建文件夹框</caption>
+            <tr>
+                <td>文件夹名称</td>
+                <td><input type="text" id="newInput" name="newFileName"/></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button style="font-size: 20px" type="submit">确认创建</button> </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="renameFrame">
+    <button id="closeRenameFrame">&times;</button>
+    <form action="controller/rename" method="post">
+        <table border="" class="renametable" cellspacing="" cellpadding="">
+            <caption>重命名框</caption>
+            <tr>
+                <td>原文件名:</td>
+                <td><input type="text" id="orgName" readonly="readonly" name="oldName"/></td>
+            </tr>
+            <tr>
+                <td>新文件名:</td>
+                <td><input type="text"  name="newName"/></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button style="font-size: 20px" type="submit">确认修改</button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
