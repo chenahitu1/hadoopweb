@@ -43,6 +43,7 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
     }
+    //1
 
     //GET 调用用于获取服务器信息，并将其做为响应返回给客户端。
     // 当经由Web浏览器或通过HTML、JSP直接访问Servlet的URL时，一般用GET调用。
